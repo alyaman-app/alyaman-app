@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - معهد اليمان</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-card-hover: rgba(255, 255, 255, 0.06);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(255, 255, 255, 0.2);
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent: #7c3aed;
+            --accent-hover: #8b5cf6;
+            --accent-light: rgba(124, 58, 237, 0.15);
+            --success: #22c55e;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            min-height: 100vh;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 58, 237, 0.12), transparent),
+                radial-gradient(ellipse 60% 40% at 100% 100%, rgba(124, 58, 237, 0.06), transparent);
+            pointer-events: none;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 60px 6% 40px;
+        }
+
+        .header-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 4.5vw, 2.8rem);
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 6%;
+        }
+
+        /* Stats Card */
+        .stats-section {
+            margin-bottom: 48px;
+        }
+
+        .stats-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 56px 40px;
+            text-align: center;
+        }
+
+        .stats-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-light);
+            border-radius: 16px;
+            color: var(--accent-hover);
+        }
+
+        .stats-title {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stats-number {
+            font-size: clamp(4rem, 10vw, 6rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 8px;
+            letter-spacing: -0.03em;
+        }
+
+        .stats-label {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Table Section */
+        .table-section {
+            margin-bottom: 48px;
+        }
+
+        .table-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .table-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .table-title::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* Table */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        thead {
+            background: var(--bg-secondary);
+        }
+
+        th {
+            padding: 16px 20px;
+            text-align: right;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            vertical-align: middle;
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: var(--bg-card-hover);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Cell Styles */
+        .device-cell {
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .device-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--text-secondary);
+        }
+
+        .browser-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: var(--accent-light);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--accent-hover);
+        }
+
+        .os-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .ip-cell {
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .datetime-cell {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            color: var(--text-muted);
+        }
+
+        .empty-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+
+        .empty-description {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        /* Actions */
+        .actions-section {
+            display: flex;
+            justify-content: center;
+            margin-top: 48px;
+            margin-bottom: 80px;
+        }
+
+        .btn-clear {
+            padding: 16px 40px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-clear:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-color: var(--success);
+        }
+
+        .toast.error {
+            border-color: var(--danger);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 48px 40px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            transform: scale(0.95);
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.show .modal {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 16px;
+            color: var(--danger);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .modal-description {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-modal {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-confirm {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background: #dc2626;
+        }
+
+        .btn-cancel {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-cancel:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 40px 5% 30px;
+            }
+
+            .header-logo {
+                width: 64px;
+                height: 64px;
+            }
+
+            .container {
+                padding: 0 5%;
+            }
+
+            .stats-card {
+                padding: 40px 24px;
+            }
+
+            .table-card {
+                padding: 24px 16px;
+            }
+
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn-clear {
+                width: 100%;
+                justify-content: center;
+                max-width: 300px;
+            }
+
+            th, td {
+                padding: 12px 14px;
+                font-size: 0.85rem;
+            }
+
+            .browser-badge, .os-badge {
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stats-section, .table-section, .actions-section {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .table-section {
+            animation-delay: 0.1s;
+        }
+
+        .actions-section {
+            animation-delay: 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <div class="content-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <img src="upload/logo.png" alt="شعار معهد اليمان" class="header-logo">
+            <h1>لوحة التحكم</h1>
+            <p>مراقبة تحميلات تطبيق معهد اليمان</p>
+        </header>
+
+        <div class="container">
+            <!-- Stats Section -->
+            <section class="stats-section">
+                <div class="stats-card">
+                    <div class="stats-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="20" x2="18" y2="10"/>
+                            <line x1="12" y1="20" x2="12" y2="4"/>
+                            <line x1="6" y1="20" x2="6" y2="14"/>
+                        </svg>
+                    </div>
+                    <h2 class="stats-title">إجمالي التحميلات</h2>
+                    <div class="stats-number" id="downloadCounter">0</div>
+                    <div class="stats-label">تنزيل</div>
+                </div>
+            </section>
+
+            <!-- Data Table Section -->
+            <section class="table-section">
+                <div class="table-card">
+                    <div class="table-header">
+                        <h2 class="table-title">سجل التحميلات</h2>
+                    </div>
+                    <div class="table-wrapper">
+                        <table id="downloadsTable">
+                            <thead>
+                                <tr>
+                                    <th>الجهاز</th>
+                                    <th>المتصفح</th>
+                                    <th>نظام التشغيل</th>
+                                    <th>عنوان IP</th>
+                                    <th>التاريخ والوقت</th>
+                                </tr>
+                            </thead>
+                            <tbody id="downloadsTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Empty State -->
+                    <div class="empty-state" id="emptyState" style="display: none;">
+                        <div class="empty-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                        </div>
+                        <h3 class="empty-title">لا يوجد تحميلات بعد</h3>
+                        <p class="empty-description">سيظهر هنا سجل جميع تحميلات التطبيق</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Actions Section -->
+            <section class="actions-section">
+                <button class="btn-clear" onclick="showClearConfirm()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                        <line x1="10" y1="11" x2="10" y2="17"/>
+                        <line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                    مسح جميع البيانات
+                </button>
+            </section>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Confirm Modal -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal">
+            <div class="modal-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+            <h3 class="modal-title">تأكيد الحذف</h3>
+            <p class="modal-description">هل أنت متأكد من أنك تريد حذف جميع بيانات التحميلات؟<br>هذا الإجراء لا يمكن التراجع عنه.</p>
+            <div class="modal-buttons">
+                <button class="btn-modal btn-confirm" onclick="clearAllData()">نعم، احذف الكل</button>
+                <button class="btn-modal btn-cancel" onclick="hideClearConfirm()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'app_downloads';
+        const COUNT_KEY = 'download_count';
+
+        function getDeviceIcon(deviceName) {
+            if (deviceName.includes('iPhone')) {
+                return `<svg class="device-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="5" y="2" width="14" height="20" rx="2"/>
+                    <line x1="12" y1="18" x2="12" y2="18"/>
+                </svg>`;
+            } else if (deviceName.includes('iPad')) {
+                return `<svg class="device-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="4" y="2" width="16" height="20" rx="2"/>
+                    <line x1="12" y1="18" x2="12" y2="18"/>
+                </svg>`;
+            } else if (deviceName.includes('Android')) {
+                return `<svg class="device-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="5" y="2" width="14" height="20" rx="2"/>
+                    <path d="M12 18h.01"/>
+                </svg>`;
+            } else if (deviceName.includes('Windows')) {
+                return `<svg class="device-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="9" height="9"/>
+                    <rect x="13" y="3" width="9" height="9"/>
+                    <rect x="2" y="13" width="9" height="9"/>
+                    <rect x="13" y="13" width="9" height="9"/>
+                </svg>`;
+            } else {
+                return `<svg class="device-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>`;
+            }
+        }
+
+        function animateCounter(element, target) {
+            let current = 0;
+            const duration = 1200;
+            const steps = 50;
+            const increment = target / steps;
+            const stepDuration = duration / steps;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current).toLocaleString('ar-EG');
+            }, stepDuration);
+        }
+
+        function loadData() {
+            const downloads = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            const count = parseInt(localStorage.getItem(COUNT_KEY) || '0');
+
+            const counterElement = document.getElementById('downloadCounter');
+            animateCounter(counterElement, count);
+
+            const tableBody = document.getElementById('downloadsTableBody');
+            const table = document.getElementById('downloadsTable');
+            const emptyState = document.getElementById('emptyState');
+
+            if (downloads.length === 0) {
+                table.style.display = 'none';
+                emptyState.style.display = 'block';
+            } else {
+                table.style.display = 'table';
+                emptyState.style.display = 'none';
+                tableBody.innerHTML = '';
+                downloads.reverse().forEach(download => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            <div class="device-cell">
+                                ${getDeviceIcon(download.device)}
+                                <span>${download.device}</span>
+                            </div>
+                        </td>
+                        <td><span class="browser-badge">${download.browser}</span></td>
+                        <td><span class="os-badge">${download.os}</span></td>
+                        <td><span class="ip-cell">${download.ip}</span></td>
+                        <td><span class="datetime-cell">${download.dateTime}</span></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+
+            console.log(`Loaded ${downloads.length} downloads`);
+        }
+
+        function clearAllData() {
+            localStorage.removeItem(STORAGE_KEY);
+            localStorage.removeItem(COUNT_KEY);
+            hideClearConfirm();
+            showToast('تم مسح جميع البيانات بنجاح', 'success');
+            setTimeout(() => {
+                loadData();
+            }, 500);
+        }
+
+        function showClearConfirm() {
+            document.getElementById('confirmModal').classList.add('show');
+        }
+
+        function hideClearConfirm() {
+            document.getElementById('confirmModal').classList.remove('show');
+        }
+
+        document.getElementById('confirmModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideClearConfirm();
+            }
+        });
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast show ' + type;
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function startAutoRefresh() {
+            setInterval(() => {
+                loadData();
+            }, 5000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Admin Dashboard initialized');
+            loadData();
+            startAutoRefresh();
+        });
+
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                loadData();
+            }
+        });
+    </script>
+</body>
+</html>
