@@ -1,0 +1,155 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>لوحة الادمن | معهد اليمان</title>
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <main class="admin">
+      <section id="login-section" class="panel login-panel">
+        <h1>تسجيل الدخول</h1>
+        <p class="muted">أدخل كلمة السر للدخول إلى لوحة الادمن.</p>
+        <form id="login-form" class="form">
+          <input type="password" name="password" placeholder="كلمة السر" required />
+          <button class="btn primary" type="submit">دخول</button>
+          <p class="error" id="login-error"></p>
+        </form>
+      </section>
+
+      <section id="admin-section" class="hidden">
+        <header class="admin-header">
+          <div>
+            <h1>لوحة الادمن</h1>
+            <p>تعديل روابط التحميل ومتابعة الاحصائيات (يتم الحفظ داخل نفس المتصفح فقط).</p>
+          </div>
+          <button class="btn" id="logout-btn" type="button">تسجيل الخروج</button>
+        </header>
+
+        <div id="toast" class="toast hidden"></div>
+
+        <section class="panel">
+          <h2>إحصائيات سريعة</h2>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="label">تحميلات Android</span>
+              <strong id="stat-android">0</strong>
+              <div class="bar"><span id="bar-android"></span></div>
+            </div>
+            <div class="stat-card">
+              <span class="label">تحميلات iOS</span>
+              <strong id="stat-ios">0</strong>
+              <div class="bar"><span id="bar-ios"></span></div>
+            </div>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="label">أجهزة موبايل</span>
+              <strong id="stat-mobile">0</strong>
+              <div class="bar"><span id="bar-mobile"></span></div>
+            </div>
+            <div class="stat-card">
+              <span class="label">أجهزة لابتوب/سطح مكتب</span>
+              <strong id="stat-desktop">0</strong>
+              <div class="bar"><span id="bar-desktop"></span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>سجل التحميلات</h2>
+          <div class="filters">
+            <select id="filter-type">
+              <option value="all">كل الأنواع</option>
+              <option value="android">Android</option>
+              <option value="ios">iOS</option>
+            </select>
+            <select id="filter-device">
+              <option value="all">كل الأجهزة</option>
+              <option value="mobile">موبايل</option>
+              <option value="laptop/desktop">لابتوب/سطح مكتب</option>
+            </select>
+            <input id="filter-search" type="search" placeholder="ابحث عن جهاز أو نظام تشغيل..." />
+          </div>
+          <p class="muted" id="downloads-count">آخر التحميلات</p>
+          <div id="downloads-list" class="downloads-list"></div>
+        </section>
+
+        <section class="panel">
+          <h2>روابط التحميل الحالية</h2>
+          <div class="grid">
+            <div class="card">
+              <h3>Android</h3>
+              <p class="muted" id="android-current">...</p>
+              <div class="stats">
+                <div>
+                  <span class="label">تحميلات الرابط الحالي</span>
+                  <strong id="android-current-count">0</strong>
+                </div>
+                <div>
+                  <span class="label">إجمالي التحميلات</span>
+                  <strong id="android-total">0</strong>
+                </div>
+              </div>
+              <form class="form link-form" data-type="android">
+                <input type="url" name="url" placeholder="رابط جديد للأندرويد" required />
+                <button class="btn primary" type="submit">حفظ الرابط</button>
+              </form>
+              <div class="history" id="android-history"></div>
+            </div>
+            <div class="card">
+              <h3>iOS</h3>
+              <p class="muted" id="ios-current">...</p>
+              <div class="stats">
+                <div>
+                  <span class="label">تحميلات الرابط الحالي</span>
+                  <strong id="ios-current-count">0</strong>
+                </div>
+                <div>
+                  <span class="label">إجمالي التحميلات</span>
+                  <strong id="ios-total">0</strong>
+                </div>
+              </div>
+              <form class="form link-form" data-type="ios">
+                <input type="url" name="url" placeholder="رابط جديد للآيفون" required />
+                <button class="btn primary" type="submit">حفظ الرابط</button>
+              </form>
+              <div class="history" id="ios-history"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>تصدير البيانات</h2>
+          <p class="muted">سيتم تنزيل ملف CSV يمكنك فتحه مباشرة في Excel.</p>
+          <button class="btn" id="export-csv" type="button">تنزيل ملف Excel (CSV)</button>
+        </section>
+
+        <section class="panel">
+          <h2>نسخ احتياطي</h2>
+          <p class="muted">احفظ نسخة من البيانات أو استورد نسخة سابقة على نفس الجهاز.</p>
+          <div class="backup-actions">
+            <button class="btn" id="export-json" type="button">تنزيل نسخة JSON</button>
+            <label class="file-input">
+              استيراد نسخة JSON
+              <input id="import-json" type="file" accept="application/json" />
+            </label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>تغيير كلمة السر</h2>
+          <form id="password-form" class="form">
+            <input type="password" name="password" placeholder="كلمة السر الجديدة" required />
+            <button class="btn primary" type="submit">حفظ كلمة السر</button>
+            <p class="muted">ملاحظة: كلمة السر مخزنة داخل المتصفح فقط.</p>
+          </form>
+        </section>
+      </section>
+    </main>
+
+    <script src="storage.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
